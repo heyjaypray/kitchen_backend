@@ -21,7 +21,9 @@
   "dependencies": {
     "lodash": "4.x.x",
     "strapi": "3.0.0-alpha.12.2",
-    "strapi-mongoose": "3.0.0-alpha.12.2"
+    "strapi-mongoose": "3.0.0-alpha.12.2",
+    "strapi-upload-aws-s3": "^3.0.0-alpha.12.5",
+    "strapi-upload-cloudinary": "^3.0.0-alpha.12.5"
   },
   "author": {
     "name": "jaypray",
