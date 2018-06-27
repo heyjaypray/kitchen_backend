@@ -5,5 +5,24 @@
         "appearance": ""
       }
     }
+  },
+  "reviews": {
+    "attributes": {
+      "name": {
+        "appearance": ""
+      },
+      "date": {
+        "appearance": ""
+      },
+      "email": {
+        "appearance": ""
+      },
+      "stars": {
+        "appearance": ""
+      },
+      "description": {
+        "appearance": ""
+      }
+    }
   }
 }

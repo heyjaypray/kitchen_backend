@@ -1,6 +1,6 @@
 {
   "connection": "default",
-  "collectionName": "",
+  "collectionName": "photos",
   "info": {
     "name": "photos",
     "description": ""
@@ -9,13 +9,14 @@
     "timestamps": true
   },
   "attributes": {
-    "Photo": {
+    "photo": {
       "model": "file",
       "via": "related",
       "plugin": "upload"
     },
-    "Category": {
-      "type": "string"
+    "category": {
+      "type": "string",
+      "required": true
     }
   }
 }

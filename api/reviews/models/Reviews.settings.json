@@ -1,0 +1,28 @@
+{
+  "connection": "default",
+  "collectionName": "",
+  "info": {
+    "name": "reviews",
+    "description": ""
+  },
+  "options": {
+    "timestamps": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "date": {
+      "type": "date"
+    },
+    "email": {
+      "type": "email"
+    },
+    "stars": {
+      "type": "integer"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}
