@@ -1,50 +1,63 @@
 import React, { Component } from "react";
 import {
-  Row,
-  Col,
-  Button,
-  ButtonDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Card,
-  CardHeader,
-  CardFooter,
-  CardTitle,
-  CardSubtitle,
-  CardBody,
-  Collapse,
-  Form,
-  FormGroup,
-  FormText,
-  Label,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  Table,
-  Badge,
-  Alert,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter
+    Row,
+    Col,
+    Button,
+    ButtonDropdown,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem,
+    Card,
+    CardHeader,
+    CardFooter,
+    CardTitle,
+    CardSubtitle,
+    CardBody,
+    Collapse,
+    Form,
+    FormGroup,
+    FormText,
+    Label,
+    Input,
+    InputGroup,
+    InputGroupAddon,
+    InputGroupButton,
+    Table,
+    Badge,
+    Alert,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter
 } from "reactstrap";
 // import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
+import API from '../api/api'
 
 
 
+function imageFormatter(cell, row){
+    return(
+        <img src = {cell} height="200px" width="200px" />
+    )   
+}
 
 
 const columns = [
-  {
-    dataField: 'photos',
-    text: 'photos'
-  }];
+    {
+        dataField: 'category',
+        text: 'category'
+    },
+    {
+        dataField:'photo.url',
+        text: 'photo',
+        formatter: imageFormatter
+    }
 
-  class Photos extends Component {
+];
+
+class Photos extends Component {
     constructor(props) {
         super(props);
 
@@ -56,16 +69,13 @@ const columns = [
 
             data: [],
             selected: [],
-            photos:[],
+            photos: [],
+            category:[],
 
             modal: false,
             removeModal: false
 
         };
-
-
-
-
     }
 
 
@@ -123,23 +133,7 @@ const columns = [
 
 
     handleName = (e) => {
-        this.setState({ name: e.target.value })
-    }
-
-    handlePrice1 = (e) => {
-        this.setState({ price1: e.target.value })
-    }
-
-    handlePrice2 = (e) => {
-        this.setState({ price2: e.target.value })
-    }
-
-    handlePrice3 = (e) => {
-        this.setState({ price3: e.target.value })
-    }
-
-    handlePrice4 = (e) => {
-        this.setState({ price4: e.target.value })
+        this.setState({ category: e.target.value })
     }
 
 
@@ -150,28 +144,28 @@ const columns = [
         const add = {
             "name": this.state.name,
             "grade": {
-              "standard_grade": {
-                "thickness1": {
-                  "name": "4/4",
-                  "price": parseFloat(this.state.price1)
+                "standard_grade": {
+                    "thickness1": {
+                        "name": "4/4",
+                        "price": parseFloat(this.state.price1)
+                    },
+                    "thickness2": {
+                        "name": "5/4",
+                        "price": parseFloat(this.state.price2)
+                    }
                 },
-                "thickness2": {
-                  "name": "5/4",
-                  "price": parseFloat(this.state.price2)
+                "select_grade": {
+                    "thickness1": {
+                        "name": "4/4",
+                        "price": parseFloat(this.state.price3)
+                    },
+                    "thickness2": {
+                        "name": "5/4",
+                        "price": parseFloat(this.state.price4)
+                    }
                 }
-              },
-              "select_grade": {
-                "thickness1": {
-                  "name": "4/4",
-                  "price": parseFloat(this.state.price3)
-                },
-                "thickness2": {
-                  "name": "5/4",
-                  "price": parseFloat(this.state.price4)
-                }
-              }
             }
-          }
+        }
 
         return (
             API
@@ -345,7 +339,7 @@ const columns = [
                                             </FormGroup>
                                         </Col>
 
-                                        
+
                                         <Col xs="3">
                                             <FormGroup>
                                                 <Label htmlFor="price3">4/4 Select Grade</Label>
@@ -361,7 +355,7 @@ const columns = [
                                             </FormGroup>
                                         </Col>
 
-                                        
+
                                         <Col xs="3">
                                             <FormGroup>
                                                 <Label htmlFor="price4">5/4 Select Grade</Label>
