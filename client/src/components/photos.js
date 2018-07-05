@@ -251,10 +251,11 @@ class Photos extends Component {
 
 
                 <Row>
+                <Col xs="12" sm="12" md="12" lg="3" />
                     <Col xs="12" sm="12" md="12" lg="6">
                         <Card>
                             <CardHeader>
-                                Woodtype
+                                Photos
                             </CardHeader>
                             <CardBody>
                                 <Collapse
@@ -264,7 +265,7 @@ class Photos extends Component {
                                         keyField="_id"
                                         data={this.state.data}
                                         columns={columns}
-                                        cellEdit={cellEditFactory({ mode: 'click' })}
+                                        // cellEdit={cellEditFactory({ mode: 'click' })}
                                         selectRow={selectRow}
                                     />
 
@@ -291,19 +292,27 @@ class Photos extends Component {
 
 
                             <Row>
+                            
                                 <Col xs="12" sm="12">
                                     <Row>
                                         <Col xs="3">
                                             <FormGroup>
-                                                <Label htmlFor="design">Name</Label>
+                                                <Label htmlFor="category">Category</Label>
                                                 <Input
-                                                    type="text"
+                                                    type="select"
                                                     name="name"
                                                     id="name"
-                                                    placeholder="Name"
+                                                    placeholder="Category"
                                                     required
                                                     onChange={this.handleName}
-                                                />
+                                                >
+                                                <option>Kitchens</option>
+                                                <option>Bathrooms</option>
+                                                <option>Furniture</option>
+                                                <option>Happy Customers</option>
+                                        
+                                                </Input>
+                                                  
                                             </FormGroup>
                                         </Col>
                                     </Row>
@@ -311,65 +320,19 @@ class Photos extends Component {
 
                                         <Col xs="3">
                                             <FormGroup>
-                                                <Label htmlFor="price1">4/4 Standard Grade</Label>
+                                                <Label htmlFor="photo">Photo</Label>
                                                 <Input
-                                                    type="number"
-                                                    step="0.01"
-                                                    name="price1"
-                                                    id="price1"
-                                                    placeholder="Price"
+                                                    type="file"
+                                                    name="photo"
+                                                    id="photo"
+                                                    placeholder="Photo"
                                                     required
                                                     onChange={this.handlePrice1}
                                                 />
                                             </FormGroup>
                                         </Col>
 
-                                        <Col xs="3">
-                                            <FormGroup>
-                                                <Label htmlFor="price2">5/4 Standard Grade</Label>
-                                                <Input
-                                                    type="number"
-                                                    step="0.01"
-                                                    name="price2"
-                                                    id="price2"
-                                                    placeholder="Price"
-                                                    required
-                                                    onChange={this.handlePrice2}
-                                                />
-                                            </FormGroup>
-                                        </Col>
-
-
-                                        <Col xs="3">
-                                            <FormGroup>
-                                                <Label htmlFor="price3">4/4 Select Grade</Label>
-                                                <Input
-                                                    type="number"
-                                                    step="0.01"
-                                                    name="price3"
-                                                    id="price3"
-                                                    placeholder="Price"
-                                                    required
-                                                    onChange={this.handlePrice3}
-                                                />
-                                            </FormGroup>
-                                        </Col>
-
-
-                                        <Col xs="3">
-                                            <FormGroup>
-                                                <Label htmlFor="price4">5/4 Select Grade</Label>
-                                                <Input
-                                                    type="number"
-                                                    step="0.01"
-                                                    name="price4"
-                                                    id="price4"
-                                                    placeholder="Price"
-                                                    required
-                                                    onChange={this.handlePrice4}
-                                                />
-                                            </FormGroup>
-                                        </Col>
+                                        
 
                                     </Row>
                                 </Col>
