@@ -14,8 +14,12 @@ const API = {
         return axios.delete(`/photos/${id}`)
     },
 
-    post: function(obj){
+    postCategory: function(obj){
         return axios.post("/photos", obj)
+    },
+
+    post: function(obj){
+        return axios.post("/upload", obj)
     }
 
 }

@@ -33,7 +33,8 @@ import {
 // import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
-import API from '../api/api'
+import API from '../api/api';
+import axios from 'axios'
 
 
 
@@ -71,11 +72,18 @@ class Photos extends Component {
             selected: [],
             photos: [],
             category:[],
+            pictures:[],
+            imageURL: [],
+            refId:[],
+
+            initialData:{},
+            modifiedData:{},
 
             modal: false,
             removeModal: false
 
         };
+    
     }
 
 
@@ -136,43 +144,32 @@ class Photos extends Component {
         this.setState({ category: e.target.value })
     }
 
+    handlePhoto = (e) => {
+        this.setState({photoFile: e.target.files[0]})
+    }
+
+    postPhoto = (obj) => {
+        axios.post("/upload", obj)
+    }
 
     handleAdd = (e) => {
 
-        e.preventDefault();
+        e.preventDefault();    
 
-        const add = {
-            "name": this.state.name,
-            "grade": {
-                "standard_grade": {
-                    "thickness1": {
-                        "name": "4/4",
-                        "price": parseFloat(this.state.price1)
-                    },
-                    "thickness2": {
-                        "name": "5/4",
-                        "price": parseFloat(this.state.price2)
-                    }
-                },
-                "select_grade": {
-                    "thickness1": {
-                        "name": "4/4",
-                        "price": parseFloat(this.state.price3)
-                    },
-                    "thickness2": {
-                        "name": "5/4",
-                        "price": parseFloat(this.state.price4)
-                    }
-                }
-            }
-        }
+        const data = new FormData();
+        data.append('file', this.state.photoFile);
 
+       const add = {
+           "category": this.state.category,
+           "photo": data
+       }    
+       
+    
         return (
             API
-                .post(add)
-                .then(res => console.log(res.data))
+                .post(this.state.photoFile)
                 .then(this.load())
-                .then(this.toggleModal())
+                .then(this.toggleModal())  
         )
 
 
@@ -223,7 +220,7 @@ class Photos extends Component {
 
     render() {
 
-        console.log(this.state.price1)
+        console.log("refId: " + this.state.refId)
 
         const selectRow = {
             mode: 'checkbox',
@@ -246,6 +243,7 @@ class Photos extends Component {
         };
 
         return (
+
             <div className="animated fadeIn">
 
 
@@ -287,7 +285,7 @@ class Photos extends Component {
                     <Form
                         onSubmit={this.handleAdd}
                     >
-                        <ModalHeader toggle={this.toggleModal}>Add Woodtype</ModalHeader>
+                        <ModalHeader toggle={this.toggleModal}>Add Photos</ModalHeader>
                         <ModalBody>
 
 
@@ -300,16 +298,16 @@ class Photos extends Component {
                                                 <Label htmlFor="category">Category</Label>
                                                 <Input
                                                     type="select"
-                                                    name="name"
-                                                    id="name"
+                                                    name="category"
+                                                    id="category"
                                                     placeholder="Category"
                                                     required
                                                     onChange={this.handleName}
                                                 >
-                                                <option>Kitchens</option>
-                                                <option>Bathrooms</option>
-                                                <option>Furniture</option>
-                                                <option>Happy Customers</option>
+                                                    <option>Kitchens</option>
+                                                    <option>Bathrooms</option>
+                                                    <option>Furniture</option>
+                                                    <option>Happy Customers</option>
                                         
                                                 </Input>
                                                   
@@ -321,14 +319,7 @@ class Photos extends Component {
                                         <Col xs="3">
                                             <FormGroup>
                                                 <Label htmlFor="photo">Photo</Label>
-                                                <Input
-                                                    type="file"
-                                                    name="photo"
-                                                    id="photo"
-                                                    placeholder="Photo"
-                                                    required
-                                                    onChange={this.handlePrice1}
-                                                />
+                                                <Input type="file" name="file" id="file" onChange={this.handlePhoto} />
                                             </FormGroup>
                                         </Col>
 
