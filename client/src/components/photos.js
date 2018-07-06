@@ -66,7 +66,7 @@ class Photos extends Component {
         // this.toggle1 = this.toggle.bind(this);
         this.state = {
 
-            collapse: false,
+            collapse: true,
             edit: false,
 
             data: [],
@@ -102,6 +102,7 @@ class Photos extends Component {
     componentDidMount() {
         const promises = [
             this.load(),
+            this.setState({ category: "Kitchen" })
         ];
 
         Promise.all(promises)
@@ -160,14 +161,6 @@ class Photos extends Component {
        const add = {
            "category": this.state.category,
        }
-       
-       const uploadFile = {
-        "files": this.state.photoFiles, // Buffer or stream of file(s)
-        "refId": this.state.refId, // User's Id.
-        "ref": "photos", // Model name.
-        "field": "photo" // Field name in the User model.
-      }
-
       try {
         const res = await axios.post('/photos', add);
 
@@ -289,7 +282,7 @@ class Photos extends Component {
 
                                 </Collapse>
                                 <CardFooter>
-                                    <Button color="secondary" onClick={this.toggle} style={{ marginBottom: '1rem' }}>Edit</Button>
+                                    {/* <Button color="secondary" onClick={this.toggle} style={{ marginBottom: '1rem' }}>Edit</Button> */}
                                 </CardFooter>
                             </CardBody>
 
