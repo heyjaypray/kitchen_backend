@@ -161,13 +161,21 @@ class Photos extends Component {
 
        const add = {
            "category": this.state.category,
-           "photo": data
-       }    
+       }
+       
+       const uploadFile = {
+        "files": data, // Buffer or stream of file(s)
+        "refId": this.state.refId, // User's Id.
+        "ref": "photos", // Model name.
+        "field": "photo" // Field name in the User model.
+      }
        
     
         return (
             API
-                .post(this.state.photoFile)
+                .postCategory(add)
+                .then(res => this.setState({ refId: res.data._id })
+                .then(this.postPhoto(uploadFile))
                 .then(this.load())
                 .then(this.toggleModal())  
         )
