@@ -34,8 +34,9 @@ import {
 import BootstrapTable from 'react-bootstrap-table-next';
 import cellEditFactory from 'react-bootstrap-table2-editor';
 import API from '../api/api';
-import axios from 'axios'
-
+import axios from 'axios';
+import errorHandle from '../util/error';
+import FileReaderInput from 'react-file-reader-input';
 
 
 function imageFormatter(cell, row){
@@ -148,39 +149,46 @@ class Photos extends Component {
         this.setState({photoFile: e.target.files[0]})
     }
 
-    postPhoto = (obj) => {
-        axios.post("/upload", obj)
+    postPhoto = () => {
+        axios.get("/photos")
     }
 
-    handleAdd = (e) => {
+    handleAdd = async (e) => {
 
         e.preventDefault();    
-
-        const data = new FormData();
-        data.append('file', this.state.photoFile);
 
        const add = {
            "category": this.state.category,
        }
        
        const uploadFile = {
-        "files": data, // Buffer or stream of file(s)
+        "files": this.state.photoFiles, // Buffer or stream of file(s)
         "refId": this.state.refId, // User's Id.
         "ref": "photos", // Model name.
         "field": "photo" // Field name in the User model.
       }
-       
-    
-        return (
-            API
-                .postCategory(add)
-                .then(res => this.setState({ refId: res.data._id })
-                .then(this.postPhoto(uploadFile))
-                .then(this.load())
-                .then(this.toggleModal())  
-        )
+
+      try {
+        const res = await axios.post('/photos', add);
+
+        const ref = await this.setState({ refId: res.data._id })
+
+        const data = new FormData();
+        data.append('files', this.state.photoFile);
+        data.append('refId', this.state.refId);
+        data.append('ref', "photos");
+        data.append('field', "photo");
+
+        const postPhoto = await axios.post('/upload', data);
+        console.log(postPhoto);
+
+        await this.load()
+        await this.toggleModal();
 
 
+      } catch (errorHandle) {
+        console.error(errorHandle);
+      }
 
     }
 
@@ -229,6 +237,7 @@ class Photos extends Component {
     render() {
 
         console.log("refId: " + this.state.refId)
+
 
         const selectRow = {
             mode: 'checkbox',
