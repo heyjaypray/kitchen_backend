@@ -282,7 +282,7 @@ class Photos extends Component {
 
                                 </Collapse>
                                 <CardFooter>
-                                    {/* <Button color="secondary" onClick={this.toggle} style={{ marginBottom: '1rem' }}>Edit</Button> */}
+                               
                                 </CardFooter>
                             </CardBody>
 
