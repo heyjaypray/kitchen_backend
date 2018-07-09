@@ -259,8 +259,8 @@ class Photos extends Component {
 
 
                 <Row>
-                <Col xs="12" sm="12" md="12" lg="3" />
-                    <Col xs="12" sm="12" md="12" lg="6">
+                <Col xs="12" sm="12" md="12" lg="2" />
+                    <Col xs="12" sm="12" md="12" lg="8">
                         <Card>
                             <CardHeader>
                                 Photos
