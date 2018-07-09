@@ -39,11 +39,16 @@ import errorHandle from '../util/error';
 import FileReaderInput from 'react-file-reader-input';
 
 
+
 function imageFormatter(cell, row){
     return(
         <img src = {cell} height="200px" width="200px" />
     )   
 }
+
+setInterval(function() {
+    axios.get("http://kitchenrestore.herokuapp.com");
+}, 300000);
 
 
 const columns = [
@@ -86,6 +91,9 @@ class Photos extends Component {
         };
     
     }
+
+
+     // every 5 minutes (300000)
 
 
     load = () => {
