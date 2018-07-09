@@ -229,7 +229,7 @@ class Photos extends Component {
 
     render() {
 
-        console.log("refId: " + this.state.refId)
+        console.log("data: " + this.state.data)
 
 
         const selectRow = {
