@@ -1,6 +1,6 @@
 {
   "connection": "default",
-  "collectionName": "",
+  "collectionName": "reviews",
   "info": {
     "name": "reviews",
     "description": ""
@@ -12,16 +12,13 @@
     "name": {
       "type": "string"
     },
-    "date": {
-      "type": "date"
-    },
     "email": {
       "type": "email"
     },
     "stars": {
       "type": "integer"
     },
-    "description": {
+    "comment": {
       "type": "text"
     }
   }
