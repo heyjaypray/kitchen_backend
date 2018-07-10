@@ -6,6 +6,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^4.1.1",
+    "create-react-app": "^1.5.2",
     "react": "^16.4.1",
     "react-bootstrap-table-next": "^0.1.14",
     "react-bootstrap-table2-editor": "^0.2.1",
