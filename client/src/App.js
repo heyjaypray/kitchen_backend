@@ -11,21 +11,13 @@ class App extends Component {
     return (
       <Router>
       <div className="App">
-     
         <Navigation />
-        <Jumbo />
-
-       
+        <Jumbo />       
           <Switch>
             <Route exact path="/"  component={Welcome} />
             <Route exact path="/photo" component={Photos} />
             <Route exact path="/blogs" component={Blog} />
           </Switch>
-        
-    
-        
-
-
       </div>
       </Router>
     );
