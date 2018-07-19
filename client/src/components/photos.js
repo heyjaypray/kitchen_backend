@@ -37,32 +37,11 @@ import API from '../api/api';
 import axios from 'axios';
 import errorHandle from '../util/error';
 import FileReaderInput from 'react-file-reader-input';
+import Gallery from 'react-grid-gallery';
+import PropTypes from 'prop-types';
+import Loader from 'react-loader-spinner'
 
 
-
-function imageFormatter(cell, row){
-    return(
-        <img src = {cell} height="200px" width="200px" />
-    )   
-}
-
-setInterval(function() {
-    axios.get("http://kitchenrestore.herokuapp.com");
-}, 300000);
-
-
-const columns = [
-    {
-        dataField: 'category',
-        text: 'category'
-    },
-    {
-        dataField:'photo.url',
-        text: 'photo',
-        formatter: imageFormatter
-    }
-
-];
 
 class Photos extends Component {
     constructor(props) {
@@ -73,90 +52,107 @@ class Photos extends Component {
 
             collapse: true,
             edit: false,
-
             data: [],
-            selected: [],
-            photos: [],
+           
             category:[],
-            pictures:[],
-            imageURL: [],
+
             refId:[],
 
             initialData:{},
             modifiedData:{},
 
             modal: false,
-            removeModal: false
+            removeModal: false,
+
+            images: [],
+            images2: [],
+            selectAllChecked: false,
+            selectedImages: [],
+
+            photoFile: [],
+
+            loader: true
 
         };
-    
+        this.onSelectImage = this.onSelectImage.bind(this);
+        this.getSelectedImages = this.getSelectedImages.bind(this);
+    }
+
+    onSelectImage (index, image) {
+        var images = this.state.images.slice();
+        var img = images[index];
+        if(img.hasOwnProperty("isSelected"))
+            img.isSelected = !img.isSelected;
+        else
+            img.isSelected = true;
+
+        this.setState({
+            images: images
+        });
+        this.getSelectedImages()
+    }
+
+    getSelectedImages () {
+        var selected = [];
+        this.setState({selectedImages: selected})
+        for(var i = 0; i < this.state.images.length; i++)
+            if(this.state.images[i].isSelected == true)
+                selected.push(this.state.images[i]);
+        return selected;
     }
 
 
-     // every 5 minutes (300000)
-
-
-    load = () => {
-        return API
+    load = async () => {
+        try { 
+            await API
             .get()
             .then(res => {
                 console.log("response: ")
                 console.log(res)
-                this.setState({ data: res.data });
+                this.setState({ data: [...res.data], loader: false });
+                this.setState({ category: "HVAC" })
             })
+
+            await this.setImages()
+
+        } catch (errorHandle) {
+            console.error(errorHandle);
+        }
+           
     };
 
 
     componentDidMount() {
         const promises = [
             this.load(),
-            this.setState({ category: "Kitchen" })
+            this.setState({ category: "HVAC" }),
         ];
 
         Promise.all(promises)
     }
 
+    setImages = async () => {
+        var selected = [];
+        for(var i = 0; i < this.state.data.length; i++)
+           await selected.push({
+                "_id": this.state.data[i]._id,
+                "src": this.state.data[i].photo.url,
+                "thumbnail": this.state.data[i].photo.url,
+                "thumbnailWidth": 100,
+                "thumbnailHeight": 100,
+                "tags": [{value: this.state.data[i].category, title: this.state.data[i].category}]
+            });
 
+            await console.log(selected)
 
+            await this.setState({images: selected})
 
-
-
-    toggle = () => {
-        this.setState({ collapse: !this.state.collapse });
-        this.setState({ edit: !this.state.collapse })
-
-        if (this.state.edit) {
-            const design = this.state.selected.map((i) => {
-                API
-                    .update(i, i._id)
-                    .then(res => console.log(res.data))
-                    .then(this.setState({ selected: [] }))
-            })
-
-        }
-    }
-
-    toggleModal = () => {
-        this.setState({
-            modal: !this.state.modal
-        });
-    }
-
-    toggleRemove = () => {
-        this.setState({
-            removeModal: !this.state.removeModal
-        });
+        return selected;
+      
     }
 
 
 
-    handleName = (e) => {
-        this.setState({ category: e.target.value })
-    }
-
-    handlePhoto = (e) => {
-        this.setState({photoFile: e.target.files[0]})
-    }
 
     postPhoto = () => {
         axios.get("/photos")
@@ -164,7 +160,13 @@ class Photos extends Component {
 
     handleAdd = async (e) => {
 
-        e.preventDefault();    
+        if (this.state.photoFile.length < 1) {
+            e.preventDefault()
+
+        } else {
+            e.preventDefault();    
+        
+        this.setState({ loader: true })
 
        const add = {
            "category": this.state.category,
@@ -183,198 +185,207 @@ class Photos extends Component {
         const postPhoto = await axios.post('/upload', data);
         console.log(postPhoto);
 
+        await document.getElementById("fileUpload").reset();
         await this.load()
-        await this.toggleModal();
+        
+       
+        
 
 
       } catch (errorHandle) {
         console.error(errorHandle);
       }
-
-    }
-
-
-    //Design Row Select
-    handleSelect = (row, isSelect) => {
-        if (isSelect) {
-            this.setState(() => ({
-                selected: [...this.state.selected, row]
-            }));
-        } else {
-            this.setState(() => ({
-                selected: this.state.selected.filter(x => x !== row)
-            }));
         }
-    }
 
-    handleDelete = (row, isSelect) => {
-
-        if (isSelect) {
-
-            this.setState(() => ({
-                selected: [...this.state.selected, row._id]
-            }));
-        } else {
-            this.setState(() => ({
-                selected: this.state.selected.filter(x => x !== row._id)
-            }));
-        }
+        
 
     }
 
     remove = () => {
-        this.setState({ removeModal: !this.state.removeModal });
 
-        const map = this.state.selected.map((i) => {
+        const map = this.state.selectedImages.map((i) => {
             API
-                .delete(i, i._id)
+                .delete(i._id)
                 .then(res => console.log(res.data))
-                .then(this.setState({ selected: [] }))
+                .then(this.setState({ selectedImages: [] }))
                 .then(this.load())
         })
     }
 
+    handlePhoto = (e) => {
+        this.setState({photoFile: e.target.files[0]})
+    }
+
+    handleName = (e) => {
+        this.setState({ category: e.target.value })
+    }
+
+
+
 
     render() {
 
-        console.log("data: " + this.state.data)
+        console.log("photo: " + JSON.stringify(this.state.selectedImages))
+        let data;
 
+        if (this.state.loader){
+            data = 
 
-        const selectRow = {
-            mode: 'checkbox',
-            clickToSelect: true,
-            clickToEdit: true,
-            selected: this.state.selected,
-            onSelect: this.handleSelect,
-            hideSelectColumn: true
-        };
+            <div>
 
-        const deleteRow = {
-            mode: 'checkbox',
-            clickToSelect: true,
-            selected: this.state.selected,
-            onSelect: this.handleDelete,
-        };
+            <Row>
+                <Col sm="12" md={{ size: 8, offset: 2 }}>
 
-        const cellEdit = {
-            mode: 'click'
-        };
-
-        return (
-
-            <div className="animated fadeIn">
-
-
-
-                <Row>
-                <Col xs="12" sm="12" md="12" lg="2" />
-                    <Col xs="12" sm="12" md="12" lg="8">
-                        <Card>
-                            <CardHeader>
-                                Photos
-                            </CardHeader>
-                            <CardBody>
-                                <Collapse
-                                    isOpen={this.state.collapse}
+                    <Col sm="3">
+                    <form
+                        onSubmit={this.handleAdd}
+                        id="fileUpload"
+                    >
+                        <FormGroup>
+                            <Label for="exampleFile">File Upload</Label>
+                            <Input type="file" name="file" id="exampleFile" onChange={this.handlePhoto} />
+                            <Label htmlFor="category">Category</Label>
+                                <Input
+                                    type="select"
+                                    name="category"
+                                    id="category"
+                                    placeholder="Category"
+                                    required
+                                    onChange={this.handleName}
                                 >
-                                    <BootstrapTable
-                                        keyField="_id"
-                                        data={this.state.data}
-                                        columns={columns}
-                                        // cellEdit={cellEditFactory({ mode: 'click' })}
-                                        selectRow={selectRow}
-                                    />
-
-                                    <Button color="secondary" onClick={this.toggleModal} style={{ marginBottom: '1rem', marginRight: '0.5rem' }}>Add</Button>
-                                    <Button color="secondary" onClick={this.toggleRemove} style={{ marginBottom: '1rem' }}>Remove</Button>
-
-                                </Collapse>
-                                <CardFooter>
-                               
-                                </CardFooter>
-                            </CardBody>
-
-                        </Card>
+                                    <option value="HVAC">HVAC</option>
+                                    <option value="Plumbing">Plumbing</option>
+                                    <option value="Sheet_Metal">Sheet Metal</option>
+                                    <option value="Commercial">Commercial</option>
+                                    <option value="Residential">Residential</option>
+                                    <option value="Indoor_Pool">Indoor Pool</option>
+                                    <option value="Geothermal">Geothermal</option>
+                        
+                                </Input>
+                            <FormText color="muted">
+                                To Add Photos, Please Choose Your File, Then Press "Add"<br />
+                                To Delete, Please Select Your Photos with the Checkbox, Then Press Delete<br />
+                            </FormText>
+                            <Button color="primary">Add</Button>
+                            <Button color="danger" onClick={this.remove} >Delete</Button>
+                        </FormGroup>
+                    </form>
                     </Col>
-                </Row>
+                
+            
+                </Col>
+            </Row>
+
+            <Row>
+                    <Col sm="5" />
+                        
+                    <Col>
+                    <Loader 
+                        type="TailSpin"
+                        color="#00BFFF"
+                        height="100"	
+                        width="100"
+                    /> 
+                    </Col>
+            </Row>
+
+            <Row>
+                <Col sm="12" md={{ size: 8, offset: 2 }}>
 
 
-                <Modal isOpen={this.state.modal} toggle={this.toggleModal} className="modal-lg">
+                
+            
+                </Col>
+            </Row>
+
+            </div>
+
+
+
+            
+              
+        } else {
+
+            data = <div>
+            
+
+            <Row>
+                <Col sm="12" md={{ size: 8, offset: 2 }}>
+
+                    <Col sm="3">
                     <Form
                         onSubmit={this.handleAdd}
                     >
-                        <ModalHeader toggle={this.toggleModal}>Add Photos</ModalHeader>
-                        <ModalBody>
-
-
-                            <Row>
-                            
-                                <Col xs="12" sm="12">
-                                    <Row>
-                                        <Col xs="3">
-                                            <FormGroup>
-                                                <Label htmlFor="category">Category</Label>
-                                                <Input
-                                                    type="select"
-                                                    name="category"
-                                                    id="category"
-                                                    placeholder="Category"
-                                                    required
-                                                    onChange={this.handleName}
-                                                >
-                                                    <option>Kitchens</option>
-                                                    <option>Bathrooms</option>
-                                                    <option>Furniture</option>
-                                                    <option>Happy Customers</option>
-                                        
-                                                </Input>
-                                                  
-                                            </FormGroup>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-
-                                        <Col xs="3">
-                                            <FormGroup>
-                                                <Label htmlFor="photo">Photo</Label>
-                                                <Input type="file" name="file" id="file" onChange={this.handlePhoto} />
-                                            </FormGroup>
-                                        </Col>
-
-                                        
-
-                                    </Row>
-                                </Col>
-                            </Row>
-
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button color="secondary" >Submit</Button>
-                            <Button color="secondary" onClick={this.toggleModal}>Close</Button>
-                        </ModalFooter>
+                        <FormGroup>
+                            <Label for="exampleFile">File Upload</Label>
+                            <Input type="file" name="file" id="exampleFile" onChange={this.handlePhoto} />
+                            <Label htmlFor="category">Category</Label>
+                                <Input
+                                    type="select"
+                                    name="category"
+                                    id="category"
+                                    placeholder="Category"
+                                    required
+                                    onChange={this.handleName}
+                                >
+                                    <option value="HVAC">HVAC</option>
+                                    <option value="Plumbing">Plumbing</option>
+                                    <option value="Sheet_Metal">Sheet Metal</option>
+                                    <option value="Commercial">Commercial</option>
+                                    <option value="Residential">Residential</option>
+                                    <option value="Indoor_Pool">Indoor Pool</option>
+                                    <option value="Geothermal">Geothermal</option>
+                        
+                                </Input>
+                            <FormText color="muted">
+                                To Add Photos, Please Choose Your File, Then Press "Add"<br />
+                                To Delete, Please Select Your Photos with the Checkbox, Then Press Delete<br />
+                            </FormText>
+                            <Button color="primary">Add</Button>
+                            <Button color="danger" onClick={this.remove} >Delete</Button>
+                        </FormGroup>
                     </Form>
-                </Modal>
+                    </Col>
+                
+            
+                </Col>
+            </Row>
 
-                <Modal isOpen={this.state.removeModal} toggle={this.toggleRemove} className="modal-lg">
+            <Row>
+                    <Col sm="12" md={{ size: 8, offset: 2 }}>
+                        
+                            <Gallery images={this.state.images}
+                            onSelectImage={this.onSelectImage}
+                            />
+                    </Col>
+            </Row>
 
-                    <ModalHeader toggle={this.toggleRemove}>Remove Woodtype</ModalHeader>
-                    <ModalBody>
-
-                        <BootstrapTable
-                            keyField="_id"
-                            data={this.state.data}
-                            columns={columns}
-                            selectRow={deleteRow}
-                        />
-                        <Button color="secondary" onClick={this.remove} style={{ marginBottom: '1rem' }}>Submit Changes</Button>
-
-                    </ModalBody>
+            <Row>
+                <Col sm="12" md={{ size: 8, offset: 2 }}>
 
 
-                </Modal>
-            </div >
-        );
+                
+            
+                </Col>
+            </Row>
+        </div>
+
+
+        }
+
+        return(
+            <div>
+                {data}
+            </div>
+         
+
+            
+        )
     }
 }
+
+
+
+
 
 export default Photos;

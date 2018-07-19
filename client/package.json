@@ -12,7 +12,9 @@
     "react-bootstrap-table2-editor": "^0.2.1",
     "react-dom": "^16.4.1",
     "react-file-reader-input": "^2.0.0",
+    "react-grid-gallery": "^0.5.1",
     "react-images-upload": "^1.1.99",
+    "react-loader-spinner": "^2.1.0",
     "react-scripts": "1.1.4",
     "reactstrap": "^6.2.0"
   },
