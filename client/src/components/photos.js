@@ -235,7 +235,7 @@ class Photos extends Component {
             <Row>
                 <Col sm="12" md={{ size: 8, offset: 2 }}>
 
-                    <Col sm="3">
+                    <Col sm="5">
                     <form
                         onSubmit={this.handleAdd}
                         id="fileUpload"
@@ -310,7 +310,7 @@ class Photos extends Component {
             <Row>
                 <Col sm="12" md={{ size: 8, offset: 2 }}>
 
-                    <Col sm="3">
+                    <Col sm="5">
                     <Form
                         onSubmit={this.handleAdd}
                     >
