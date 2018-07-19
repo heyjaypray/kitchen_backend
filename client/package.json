@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "proxy": "http://localhost:1337",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^4.1.1",
