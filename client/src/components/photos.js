@@ -254,6 +254,7 @@ class Photos extends Component {
                                 >
                                     <option value="Kitchens">Kitchens</option>
                                     <option value="Refacing">Refacing</option>
+                                    <option value="Cabinets">Cabinets</option>
                                     <option value="Bathrooms">Bathrooms</option>
                                     <option value="Furniture">Furniture</option>
                                     <option value="Happy_Customers">Happy Customers</option>
@@ -327,6 +328,7 @@ class Photos extends Component {
                                 >
                                     <option value="Kitchens">Kitchens</option>
                                     <option value="Refacing">Refacing</option>
+                                    <option value="Cabinets">Cabinets</option>
                                     <option value="Bathrooms">Bathrooms</option>
                                     <option value="Furniture">Furniture</option>
                                     <option value="Happy_Customers">Happy Customers</option>
