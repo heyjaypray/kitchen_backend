@@ -110,7 +110,7 @@ class Photos extends Component {
                 console.log("response: ")
                 console.log(res)
                 this.setState({ data: [...res.data], loader: false });
-                this.setState({ category: "HVAC" })
+                this.setState({ category: "Kitchens" })
             })
 
             await this.setImages()
@@ -124,8 +124,7 @@ class Photos extends Component {
 
     componentDidMount() {
         const promises = [
-            this.load(),
-            this.setState({ category: "HVAC" }),
+            this.load()
         ];
 
         Promise.all(promises)
@@ -253,13 +252,11 @@ class Photos extends Component {
                                     required
                                     onChange={this.handleName}
                                 >
-                                    <option value="HVAC">HVAC</option>
-                                    <option value="Plumbing">Plumbing</option>
-                                    <option value="Sheet_Metal">Sheet Metal</option>
-                                    <option value="Commercial">Commercial</option>
-                                    <option value="Residential">Residential</option>
-                                    <option value="Indoor_Pool">Indoor Pool</option>
-                                    <option value="Geothermal">Geothermal</option>
+                                    <option value="Kitchens">Kitchens</option>
+                                    <option value="Refacing">Refacing</option>
+                                    <option value="Bathrooms">Bathrooms</option>
+                                    <option value="Furniture">Furniture</option>
+                                    <option value="Happy_Customers">Happy Customers</option>
                         
                                 </Input>
                             <FormText color="muted">
@@ -328,13 +325,11 @@ class Photos extends Component {
                                     required
                                     onChange={this.handleName}
                                 >
-                                    <option value="HVAC">HVAC</option>
-                                    <option value="Plumbing">Plumbing</option>
-                                    <option value="Sheet_Metal">Sheet Metal</option>
-                                    <option value="Commercial">Commercial</option>
-                                    <option value="Residential">Residential</option>
-                                    <option value="Indoor_Pool">Indoor Pool</option>
-                                    <option value="Geothermal">Geothermal</option>
+                                    <option value="Kitchens">Kitchens</option>
+                                    <option value="Refacing">Refacing</option>
+                                    <option value="Bathrooms">Bathrooms</option>
+                                    <option value="Furniture">Furniture</option>
+                                    <option value="Happy_Customers">Happy Customers</option>
                         
                                 </Input>
                             <FormText color="muted">
