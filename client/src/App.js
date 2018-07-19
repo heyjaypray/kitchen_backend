@@ -13,11 +13,11 @@ class App extends Component {
       <div className="App">
         <Navigation />
         <Jumbo />       
-          <Switch>
+       
             <Route exact path="/"  component={Welcome} />
             <Route exact path="/photo" component={Photos} />
             <Route exact path="/blogs" component={Blog} />
-          </Switch>
+     
       </div>
       </Router>
     );
