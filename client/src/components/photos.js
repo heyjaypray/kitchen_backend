@@ -257,7 +257,7 @@ class Photos extends Component {
                                     <option value="Cabinets">Cabinets</option>
                                     <option value="Bathrooms">Bathrooms</option>
                                     <option value="Furniture">Furniture</option>
-                                    <option value="Happy_Customers">Happy Customers</option>
+                                    <option value="Customers">Happy Customers</option>
                         
                                 </Input>
                             <FormText color="muted">
@@ -327,11 +327,9 @@ class Photos extends Component {
                                     onChange={this.handleName}
                                 >
                                     <option value="Kitchens">Kitchens</option>
-                                    <option value="Refacing">Refacing</option>
-                                    <option value="Cabinets">Cabinets</option>
                                     <option value="Bathrooms">Bathrooms</option>
                                     <option value="Furniture">Furniture</option>
-                                    <option value="Happy_Customers">Happy Customers</option>
+                                    <option value="Customers">Happy Customers</option>
                         
                                 </Input>
                             <FormText color="muted">
